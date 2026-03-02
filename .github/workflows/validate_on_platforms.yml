@@ -5,7 +5,7 @@ on:
     branches: [duckdb]
   pull_request:
     branches: [duckdb]
-    
+
 jobs:
   build-macos:
       name: Validate Getting Started works on macOS
@@ -14,19 +14,18 @@ jobs:
         - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # actions/checkout@v3
         - name: Set up Python
           uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # actions/setup-python@v4
+        - name: Install uv
+          uses: astral-sh/setup-uv@e58605a9b6da7c637471fab8847a5e5a6b8df081  # astral-sh/setup-uv@v5
         - name: Full Deploy Commands
           run: |
-            python3 -m venv venv
-            source venv/bin/activate
-            venv/bin/python3 -m pip install --upgrade pip
-            python3 -m pip install -r requirements.txt
-            source venv/bin/activate
+            uv sync
+            source .venv/bin/activate
             which dbt
             dbt --version
             dbt debug
             dbt build
             dbt docs generate
-            duckcli jaffle_shop.duckdb -e "select * from customers where customer_id = 42"
+            python -c "import duckdb; conn = duckdb.connect('jaffle_shop.duckdb'); conn.sql('select * from customers where customer_id = 42').show(); conn.close()"
           shell: bash
 
   build-linux:
@@ -36,19 +35,18 @@ jobs:
         - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # actions/checkout@v3
         - name: Set up Python
           uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # actions/setup-python@v4
+        - name: Install uv
+          uses: astral-sh/setup-uv@e58605a9b6da7c637471fab8847a5e5a6b8df081  # astral-sh/setup-uv@v5
         - name: Full Deploy Commands
           run: |
-            python3 -m venv venv
-            source venv/bin/activate
-            venv/bin/python3 -m pip install --upgrade pip
-            python3 -m pip install -r requirements.txt
-            source venv/bin/activate
+            uv sync
+            source .venv/bin/activate
             which dbt
             dbt --version
             dbt debug
             dbt build
             dbt docs generate
-            duckcli jaffle_shop.duckdb -e "select * from customers where customer_id = 42"
+            python -c "import duckdb; conn = duckdb.connect('jaffle_shop.duckdb'); conn.sql('select * from customers where customer_id = 42').show(); conn.close()"
           shell: bash
 
   build-linux-powershell-core:
@@ -58,19 +56,16 @@ jobs:
         - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # actions/checkout@v3
         - name: Set up Python
           uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # actions/setup-python@v4
+        - name: Install uv
+          uses: astral-sh/setup-uv@e58605a9b6da7c637471fab8847a5e5a6b8df081  # astral-sh/setup-uv@v5
         - name: Full Deploy Commands
           run: |
-            python3 -m venv venv
-            venv/bin/Activate.ps1
-            venv/bin/python3 -m pip install --upgrade pip
-            python3 -m pip install -r requirements.txt
-            venv/bin/Activate.ps1
-            Get-Command dbt
-            dbt --version
-            dbt debug
-            dbt build
-            dbt docs generate
-            duckcli jaffle_shop.duckdb -e "select * from customers where customer_id = 42"
+            uv sync
+            uv run dbt --version
+            uv run dbt debug
+            uv run dbt build
+            uv run dbt docs generate
+            uv run python -c "import duckdb; conn = duckdb.connect('jaffle_shop.duckdb'); print(conn.sql('select * from customers where customer_id = 42').fetchall()); conn.close()"
           shell: pwsh
 
   build-windows-powershell:
@@ -80,19 +75,16 @@ jobs:
         - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # actions/checkout@v3
         - name: Set up Python
           uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # actions/setup-python@v4
+        - name: Install uv
+          uses: astral-sh/setup-uv@e58605a9b6da7c637471fab8847a5e5a6b8df081  # astral-sh/setup-uv@v5
         - name: Full Deploy Commands
           run: |
-            python -m venv venv
-            venv\Scripts\Activate.ps1
-            python -m pip install --upgrade pip
-            python -m pip install -r requirements.txt
-            venv\Scripts\Activate.ps1
-            Get-Command dbt
-            dbt --version
-            dbt debug
-            dbt build
-            dbt docs generate
-            duckcli jaffle_shop.duckdb -e "select * from customers where customer_id = 42"
+            uv sync
+            uv run dbt --version
+            uv run dbt debug
+            uv run dbt build
+            uv run dbt docs generate
+            uv run python -c "import duckdb; conn = duckdb.connect('jaffle_shop.duckdb'); print(conn.sql('select * from customers where customer_id = 42').fetchall()); conn.close()"
           shell: powershell
 
   build-windows-cmd:
@@ -102,17 +94,16 @@ jobs:
         - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # actions/checkout@v3
         - name: Set up Python
           uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # actions/setup-python@v4
+        - name: Install uv
+          uses: astral-sh/setup-uv@e58605a9b6da7c637471fab8847a5e5a6b8df081  # astral-sh/setup-uv@v5
         - name: Full Deploy Commands
           run: |
-            python -m venv venv
-            venv\Scripts\activate.bat
-            python -m pip install --upgrade pip
-            python -m pip install -r requirements.txt
-            venv\Scripts\activate.bat
+            uv sync
+            .venv\Scripts\activate.bat
             where dbt
             dbt --version
             dbt debug
             dbt build
             dbt docs generate
-            duckcli jaffle_shop.duckdb -e "select * from customers where customer_id = 42"
+            python -c "import duckdb; conn = duckdb.connect('jaffle_shop.duckdb'); conn.sql('select * from customers where customer_id = 42').show(); conn.close()"
           shell: cmd

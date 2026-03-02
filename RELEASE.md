@@ -1,12 +1,13 @@
 # Release instructions
 
-1. Install `pip-tools`:
+1. Update dependencies in `pyproject.toml` as needed.
+1. Run `uv lock` to update the lockfile:
     ```shell
-    python -m pip install -r requirements-dev.txt
+    uv lock
     ```
-1. Run `pip-compile` to pin all the dependencies and update `requirements.txt`:
+1. Regenerate `requirements.txt` for pip users:
     ```shell
-    pip-compile
+    uv pip compile pyproject.toml -o requirements.txt
     ```
 1. Commit the result.
 1. Open a PR.
