@@ -52,6 +52,8 @@ If you want an adrenaline rush from a process that used to take dbt newcomers `1
 ## Running this project
 Prerequisities: Python >= 3.13
 
+> **Tip:** We recommend using [uv](https://docs.astral.sh/uv/getting-started/installation/) for faster dependency installation. If you have `uv` installed, you can replace all the venv and pip steps with `uv sync`, then activate the `.venv` virtual environment it creates.
+
 ### Mach Speed: No explanation needed
 
 > Run `dbt` as fast as possible in a single copy and paste motion!
@@ -383,24 +385,24 @@ To get up and running with this project:
 
 1. Query the data:
 
-    Launch a DuckDB command-line interface (CLI):
+    Launch the [DuckDB CLI](https://duckdb.org/docs/installation/?environment=cli):
     ```shell
-    duckcli jaffle_shop.duckdb
+    duckdb jaffle_shop.duckdb
     ```
 
     Run a query at the prompt and exit:
     ```
     select * from customers where customer_id = 42;
-    exit;
+    .exit
     ```
 
     Alternatively, use a single-liner to perform the query:
     ```shell
-    duckcli jaffle_shop.duckdb -e "select * from customers where customer_id = 42"
+    duckdb jaffle_shop.duckdb -c "select * from customers where customer_id = 42"
     ```
     or:
     ```shell
-    echo 'select * from customers where customer_id = 42' | duckcli jaffle_shop.duckdb
+    echo 'select * from customers where customer_id = 42' | duckdb jaffle_shop.duckdb
     ```
 
 1. Generate and view the documentation for the project:
@@ -431,7 +433,6 @@ To get up and running with this project:
 ## Browsing the data
 Some options:
 - [DuckDB UI](https://duckdb.org/docs/stable/extensions/ui.html)
-- [duckcli](https://pypi.org/project/duckcli/)
 - [DuckDB CLI](https://duckdb.org/docs/installation/?environment=cli)
 - [How to set up DBeaver SQL IDE for DuckDB](https://duckdb.org/docs/guides/sql_editors/dbeaver)
 
