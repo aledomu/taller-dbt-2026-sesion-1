@@ -19,16 +19,21 @@ clean-targets:
 
 require-dbt-version: [">=1.11.0", "<2.0.0"]
 
-seeds: 
+seeds:
   +docs:
     node_color: '#cd7f32'
 
 models:
   jaffle_shop:
-    +materialized: table
     staging:
+      +materialized: ephemeral
+      +docs:
+        node_color: 'blue'
+    intermediate:
       +materialized: view
       +docs:
         node_color: 'silver'
-    +docs:
-      node_color: 'gold'
+    marts:
+      +materialized: table
+      +docs:
+        node_color: 'gold'
